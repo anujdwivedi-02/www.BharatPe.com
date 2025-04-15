@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bharat Pay - Payment Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+  background: url('bharatpe-1605801197.jpg') no-repeat center center/cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .logo {
+      width: 100px;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      flex: 1 1 48%;
+      padding: 0.6rem;
+      background-color: #0077ff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .tab.active {
+      background-color: #004bb5;
+    }
+
+    .payment-section {
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #333;
+      font-size: 1.3rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .qr {
+      width: 100%;
+      max-width: 200px;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #28a745;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background-color: #218838;
+    }
+
+    .popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 10;
+      text-align: center;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .popup.show {
+      display: block;
+    }
+
+    .popup h3 {
+      margin-bottom: 0.5rem;
+      color: #28a745;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        padding: 1.2rem;
+      }
+
+      .tab {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="th.jpeg" alt="Bharat Pay Logo" class="logo" />
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('bank')">Bank Transfer</button>
+      <button class="tab" onclick="showTab('upi')">UPI Transfer</button>
+    </div>
+
+    <form onsubmit="return handleSubmit(event)">
+      <div class="payment-section" id="bank">
+        <h2>Bank Transfer</h2>
+        <p><strong>Account Holder Name:</strong> Vikash Kaushik</p>
+        <p><strong>Account Number:</strong> 13820100180336</p>
+        <p><strong>IFSC Code:</strong> FDRL0001382</p>
+        <div class="form-group">
+          <label>Transaction ID:</label>
+          <input type="text" placeholder="Enter Transaction ID" id="bank-txn" />
+        </div>
+      </div>
+
+      <div class="payment-section hidden" id="upi">
+        <h2>UPI Transfer</h2>
+        <img src="qr.jpg" alt="UPI QR Code" class="qr"/>
+        <div class="form-group">
+          <label>Transaction ID:</label>
+          <input type="text" placeholder="Enter Transaction ID" id="upi-txn" />
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+
+    <div class="popup" id="successPopup">
+      <h3>Transaction Successful!</h3>
+      <p>Your payment has been submitted successfully.</p>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      document.querySelectorAll('.payment-section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(tabName).classList.remove('hidden');
+
+      document.querySelectorAll('.tab').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      if (tabName === 'bank') {
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+      } else {
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+      }
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      const bankVisible = !document.getElementById('bank').classList.contains('hidden');
+      const txnInput = bankVisible ? document.getElementById('bank-txn') : document.getElementById('upi-txn');
+
+      if (!txnInput.value.trim()) {
+        alert('Please enter the Transaction ID.');
+        return false;
+      }
+
+      const popup = document.getElementById('successPopup');
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 3000);
+      return false;
+    }
+  </script>
+</body>
+</html>
